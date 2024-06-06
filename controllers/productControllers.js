@@ -83,8 +83,60 @@ const getAllProducts = async(req,res) => {
  }
 
 }
+// fetch single product
+const getProduct = async (req,res) => {
+
+  // receive id from URL
+  const productId = req.params.id;
+
+  try {
+      const product = await productModel.findById(productId)
+      console.log(product)
+      res.status(201).json({
+          success : true,
+          message : "Product Fetched!",
+          product : product
+      })
+
+
+  } catch (error) {
+      console.log(error)
+      res.json({
+          success : false,
+          message : "Server Error!"
+       })
+  }
+
+}
+
+//delete product
+const deleteProduct = async (req,res) => {
+//get product id
+  const productId = req.params.id;
+
+  try {
+
+    await productModel.findByIdAndDelete(productId)
+    res.status(201).json({
+      success : true,
+      message : "Product Deleted!"
+    })
+    
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({
+      success: false,
+      message : "Internal Server Error"
+    })
+    
+  }
+}
+
 
 module.exports = {
     createProduct,
-    getAllProducts
+    getAllProducts,
+    getProduct,
+    deleteProduct
+
 }
